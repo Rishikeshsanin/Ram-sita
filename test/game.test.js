@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const {Game, SIGILS, ROLES, scoreFor} = require('../src/game');
+const {Game, ROLES, scoreFor} = require('../src/game');
 
 function lobby({mode='classic', totalRounds=7, maxPlayers=6} = {}) {
   let now = 100000;
@@ -21,6 +21,7 @@ test('game creates six-character unique-looking codes and rejects invalid settin
   assert.throws(()=>game.create('Host',{maxPlayers:2}),/Players/);
   assert.throws(()=>game.create('Host',{totalRounds:99}),/Rounds/);
   assert.throws(()=>game.create('<script>',{}),/Names/);
+  assert.throws(()=>game.create('Host',{mode:'mystery'}),/Only Classic/);
 });
 test('lobbies reject duplicate names, capacity overflow and nonhost starts',()=>{
   const {game,room,host,b,c} = lobby({maxPlayers:4});
@@ -37,10 +38,10 @@ test('lobbies reject duplicate names, capacity overflow and nonhost starts',()=>
   assert.equal(room.status,'discussion');
   assert.equal(room.round,1);
 });
-test('roles are exclusive, one each, and snapshots never leak other secret identities',()=>{
-  const {game,room,host,b,c} = lobby({mode:'mystery'});
+test('classic roles are exclusive and snapshots never leak another identity',()=>{
+  const {game,room,host,b,c} = lobby();
   game.act(room,host,'start');
-  assert.ok(typeof room.challenge === 'string' && room.challenge.length > 10);
+  assert.equal(room.config.mode,'classic');
   assert.deepEqual(Object.values(room.roles).sort(),ROLES.slice(0,3).sort());
   for (const p of [host,b,c]) {
     const state = game.snapshot(room,p);
@@ -49,28 +50,29 @@ test('roles are exclusive, one each, and snapshots never leak other secret ident
     assert.ok(!JSON.stringify(state).includes(b.token));
     assert.ok(!JSON.stringify(state).includes(c.token));
     assert.ok(!JSON.stringify(state).includes(host.token));
-    if (['Rama','Sita','Ravana'].includes(state.you.role)) assert.equal(state.you.secretSigil,room.trueSigil);
+    assert.equal(state.you.secretSigil,null);
     for (const other of state.players) {
       assert.equal(Object.hasOwn(other,'role'),false);
       assert.equal(Object.hasOwn(other,'token'),false);
     }
   }
 });
-test('mystery clues stay hidden from ordinary roles in a larger court',()=>{
-  const {game,room,host} = lobby({mode:'mystery',maxPlayers:5});
+test('the public release has no symbols, mystery mode or sigil actions',()=>{
+  const {game,room,host} = lobby({maxPlayers:5});
   for (const name of ['Fourth','Fifth']) {
     const p=game.join(room.code,name).player;
-    p.connected=true;game.act(room,p,'ready',{ready:true});
+    p.connected=true;
+    game.act(room,p,'ready',{ready:true});
   }
   game.act(room,host,'start');
+  assert.equal(room.trueSigil,null);
+  assert.equal(room.challenge,null);
   for (const p of room.players) {
-    const s=game.snapshot(room,p);
-    assert.equal(s.you.secretSigil,['Rama','Sita','Ravana'].includes(s.you.role)?room.trueSigil:null);
+    const state=game.snapshot(room,p);
+    assert.equal(state.you.secretSigil,null);
+    assert.ok(state.players.every(x=>x.claim===null));
+    assert.throws(()=>game.act(room,p,'claim',{sigil:'moon'}),/Sigil claims/);
   }
-  const other=room.players.find(p=>room.roles[p.id]==='Lakshmana');
-  game.act(room,other,'claim',{sigil:SIGILS[0].id});
-  assert.equal(game.snapshot(room,host).players.find(p=>p.id===other.id).claim,SIGILS[0].id);
-  assert.throws(()=>game.act(room,other,'claim',{sigil:'hacked'}),/Unknown/);
 });
 test('only Rama guesses and the server awards fixed role scores',()=>{
   const {game,room,host,b,c}=lobby();
@@ -146,7 +148,7 @@ test('leaving during an active match cannot erase the Sita seat or corrupt point
 
 test('ten-player court completes thirty rounds with balanced Rama assignments',()=>{
   const game=new Game();
-  const {room,player:host}=game.create('Host',{maxPlayers:10,totalRounds:30,guessSeconds:20,mode:'mystery'});
+  const {room,player:host}=game.create('Host',{maxPlayers:10,totalRounds:30,guessSeconds:20,mode:'classic'});
   host.connected=true;
   for(let i=1;i<10;i++){
     const p=game.join(room.code,'Player '+i).player;
