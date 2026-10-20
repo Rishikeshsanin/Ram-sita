@@ -21,6 +21,11 @@
   let socket = null;
   let snap = null;
   let saved = load();
+  const requestedRoom = new URLSearchParams(location.search).get('room');
+  if (requestedRoom && saved && saved.code !== requestedRoom.toUpperCase()) {
+    localStorage.removeItem(STORE);
+    saved = null;
+  }
   let pending = null;
   let tab = new URLSearchParams(location.search).get('room') ? 'join' : 'create';
   let selected = null;
