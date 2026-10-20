@@ -191,7 +191,7 @@
       '<p class="muted" style="font-size:12px;margin:13px 0 0">'+(host? (snap.players.length<3?'At least 3 players are needed.':ready?'Your court is ready to go.':'Everyone must be online and ready before starting.'):'The host will start the game when everyone is ready.')+'</p></section></div>' +
       '<aside class="card"><div class="eyebrow">Game setup</div>' +
       (host ? '<form id="configForm">'+settingsFields(snap.config)+'<button class="btn outline wide" type="submit">Save settings</button></form>' :
-        '<p><b>'+esc'Classic'+'</b></p><p class="muted">'+snap.config.totalRounds+' rounds · '+snap.config.guessSeconds+' seconds per round</p><p class="muted" style="font-size:12px">The host decides all settings.</p>') +
+        '<p><b>Classic</b></p><p class="muted">'+snap.config.totalRounds+' rounds · '+snap.config.guessSeconds+' seconds per round</p><p class="muted" style="font-size:12px">The host decides all settings.</p>') +
       '<div class="mode-note" style="margin-top:19px">Keep your cards private until the reveal. Talk, accuse and bluff face-to-face!</div></aside></div>';
   }
   function roleMarkup() {
