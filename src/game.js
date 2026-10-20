@@ -51,11 +51,12 @@ function intBetween(value, lo, hi, label) {
 }
 function settings(input) {
   input = input || {};
+  if (input.mode !== undefined && input.mode !== 'classic') fail('Only Classic Ram–Sita is available in this release.');
   return {
     maxPlayers: intBetween(input.maxPlayers == null ? 6 : input.maxPlayers, MIN_PLAYERS, MAX_PLAYERS, 'Players'),
     totalRounds: intBetween(input.totalRounds == null ? 7 : input.totalRounds, 3, 30, 'Rounds'),
     guessSeconds: intBetween(input.guessSeconds == null ? 45 : input.guessSeconds, 20, 90, 'Timer'),
-    mode: ['classic', 'mystery'].includes(input.mode) ? input.mode : 'classic'
+    mode: 'classic'
   };
 }
 function randomId(size = 16) { return crypto.randomBytes(size).toString('hex'); }
