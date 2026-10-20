@@ -23,7 +23,7 @@ async function socketAt(port) {
   await once(ws,'open');
   return ws;
 }
-test('three real WebSocket clients complete a match with private role snapshots',async()=>{
+test('three real WebSocket clients complete a classic match with private role snapshots',async()=>{
   const app=startServer(0);
   const clients=[];
   try {
@@ -35,7 +35,7 @@ test('three real WebSocket clients complete a match with private role snapshots'
     assert.equal((await fetch('http://127.0.0.1:'+port+'/../../etc/passwd')).status,404);
     const host=await socketAt(port);clients.push(host);
     const hostSession=packet(host,p=>p.type==='session');
-    host.send(JSON.stringify({type:'create',name:'Host',config:{maxPlayers:3,totalRounds:3,guessSeconds:30,mode:'mystery'}}));
+    host.send(JSON.stringify({type:'create',name:'Host',config:{maxPlayers:3,totalRounds:3,guessSeconds:30,mode:'classic'}}));
     const {code,token}=await hostSession;
     assert.equal(typeof token,'string');
     assert.equal(code.length,6);
@@ -59,7 +59,7 @@ test('three real WebSocket clients complete a match with private role snapshots'
     for(const s of states){
       assert.ok(!JSON.stringify(s).includes(token));
       assert.ok(s.players.every(p=>!('role' in p)));
-      assert.ok(s.you.secretSigil);
+      assert.equal(s.you.secretSigil,null);
     }
     const ramaIdx=states.findIndex(s=>s.you.role==='Rama');
     const sita=states.find(s=>s.you.role==='Sita');
