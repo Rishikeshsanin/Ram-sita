@@ -50,7 +50,7 @@ test('classic roles are exclusive and snapshots never leak another identity',()=
     assert.ok(!JSON.stringify(state).includes(b.token));
     assert.ok(!JSON.stringify(state).includes(c.token));
     assert.ok(!JSON.stringify(state).includes(host.token));
-    assert.equal(state.you.secretSigil,null);
+    assert.equal(Object.hasOwn(state.you,'secretSigil'),false);
     for (const other of state.players) {
       assert.equal(Object.hasOwn(other,'role'),false);
       assert.equal(Object.hasOwn(other,'token'),false);
@@ -65,13 +65,13 @@ test('the public release has no symbols, mystery mode or sigil actions',()=>{
     game.act(room,p,'ready',{ready:true});
   }
   game.act(room,host,'start');
-  assert.equal(room.trueSigil,null);
-  assert.equal(room.challenge,null);
+  assert.equal(Object.hasOwn(room,'trueSigil'),false);
+  assert.equal(Object.hasOwn(room,'challenge'),false);
   for (const p of room.players) {
     const state=game.snapshot(room,p);
-    assert.equal(state.you.secretSigil,null);
-    assert.ok(state.players.every(x=>x.claim===null));
-    assert.throws(()=>game.act(room,p,'claim',{sigil:'moon'}),/Sigil claims/);
+    assert.equal(Object.hasOwn(state.you,'secretSigil'),false);
+    assert.ok(state.players.every(x=>!Object.hasOwn(x,'claim')));
+    assert.throws(()=>game.act(room,p,'claim',{sigil:'moon'}),/Unknown action/);
   }
 });
 test('only Rama guesses and the server awards fixed role scores',()=>{
