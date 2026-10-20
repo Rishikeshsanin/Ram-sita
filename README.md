@@ -41,9 +41,21 @@ Open http://localhost:3000. To connect phones on the same Wi-Fi, start the app o
 
 ## Deploy
 
-Run the **single, persistent Node.js service** (with WebSocket support) on Railway or a compatible host, with one replica. The repository includes a `Dockerfile` and a `/health` endpoint.
+The standalone app requires a **single persistent WebSocket-capable Node.js host** and includes a `Dockerfile`, `render.yaml` and `/health` endpoint.
 
-Minglecade is a **directory**, not a game server: add the **live public game URL** to Minglecade's `src/data/games.ts`, then the hub shows a Ram–Sita card pointing to the independent deployed app.
+### Render fallback (prepared)
+
+Railway may temporarily block new deployments. We included a dedicated [Render Blueprint](render.yaml) for this exact repository. To deploy it:
+
+1. Open [Render Dashboard](https://dashboard.render.com/) and connect GitHub.
+2. Choose **New → Blueprint**, select `Rishikeshsanin/Ram-sita` on branch `main`, and approve only the new **ram-sita-classic** web service. Do **not** import any existing services or databases.
+3. Let the Docker build and HTTP `/health` checks finish, then open the **actual** `.onrender.com` address shown in your dashboard. Never guess a live URL from the service name.
+4. Verify the public homepage, `/health`, and a 3-person round from separate phones.
+5. After verification, add that exact HTTPS URL to [Minglecade](https://github.com/Rishikeshsanin/Minglecade) in `src/data/games.ts`.
+
+The Blueprint targets a **single Singapore-region Free web service** with no database. Free services can spin down after 15 minutes without inbound HTTP or WebSocket messages, and sleeping, restarting or redeploying will erase the in-memory rooms. For a more dependable always-on game, consider a paid instance only after explicitly agreeing to the cost. A free instance is appropriate for testing and casual rounds, not production uptime.
+
+Minglecade is a **directory**, not a game server: its Play link opens the standalone game in another tab. Do not publish a placeholder or speculative game URL.
 
 ### Important operational limitations
 
