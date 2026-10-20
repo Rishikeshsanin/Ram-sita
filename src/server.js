@@ -127,12 +127,16 @@ function startServer(port = Number(process.env.PORT ?? 3000), game = new Game())
     ws.on('error', () => {});
   });
 
+  let lastPing = 0;
   const timer = setInterval(() => {
     for (const room of game.tick()) broadcast(room);
-    for (const ws of wss.clients) {
-      if (!ws.alive) { ws.terminate(); continue; }
-      ws.alive = false;
-      try { ws.ping(); } catch (_) {}
+    if (Date.now() - lastPing >= 25000) {
+      lastPing = Date.now();
+      for (const ws of wss.clients) {
+        if (!ws.alive) { ws.terminate(); continue; }
+        ws.alive = false;
+        try { ws.ping(); } catch (_) {}
+      }
     }
     if (createLimits.size > 5000) {
       for (const [ip, times] of createLimits) {
