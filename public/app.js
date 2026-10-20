@@ -239,6 +239,7 @@
       '<div class="timer-wrap"><span class="muted">Time left</span><span id="timer" class="timer">--</span></div></div>' +
       '<div class="track"><div id="timer-fill" class="track-fill"></div></div>' +
       (snap.paused?'<div class="alert-note">⏸ The host has paused the round. Discussion and guessing are temporarily frozen.</div>':'') +
+      (snap.challenge?'<div class="court-challenge"><span class="challenge-symbol">⚖️</span><div><b>THE COURT CHALLENGE</b><p>'+esc(snap.challenge)+'</p><small>Everyone answers out loud. Bluffing encouraged.</small></div></div>':'') +
       '<div class="columns"><div class="card"><div class="space-between"><span class="pill">🏹 Rama: '+esc(rama)+'</span><span class="muted" style="font-size:12px">One guess only</span></div>' +
       '<div class="role-stage">'+roleMarkup()+'</div>' +
       (snap.config.mode==='mystery'?mysteryArea():'') +
