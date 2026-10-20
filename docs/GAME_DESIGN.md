@@ -6,7 +6,7 @@ A game built to **bring people in the same real room closer together**. A phone 
 ## The two launch modes
 **Classic:** Rama knows their own identity and must find Sita. Everyone may bluff aloud. The round ends with one locked guess or time expiry. Roles reveal and the server scores everyone.
 
-**Court of Whispers:** Rama, Sita and Ravana are all privately shown one randomly selected **royal sigil**. Other players do not know which sigil is correct. Each player except Rama can choose/change one *public sigil claim* (from six). Everyone debates in person. Two people may truthfully know the sigil, but one of them is Ravana, so a matching claim proves nothing. Sita can lie; Ravana can impersonate; other players can bluff. Rama locks one guess. Same scoring as Classic.
+**Court of Whispers:** Rama, Sita and Ravana are all privately shown one randomly selected **royal sigil**. Other players do not know which sigil is correct. Each player except Rama can choose/change one *public sigil claim* (from six). Each round also displays one of 20 lighthearted **Court Challenges** as a conversation starter for everyone. Everyone debates in person. Two people may truthfully know the sigil, but one of them is Ravana, so a matching claim proves nothing. Sita can lie; Ravana can impersonate; other players can bluff. Rama locks one guess. Same scoring as Classic.
 
 Why the twist works: an explicit information asymmetry creates a unique moment every round, while roles are still private and no player's device sends proof of their identity to another player. Avoid claiming this gameplay is unprecedented without market research.
 
