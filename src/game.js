@@ -14,6 +14,29 @@ const SIGILS = [
   { id: 'star', symbol: '⭐', name: 'Star' }
 ];
 
+const COURT_CHALLENGES = [
+  'Who in this room has the worst poker face?',
+  'Who would betray the group chat for a plate of biryani?',
+  'Who here looks suspicious even while telling the truth?',
+  'Who is most likely to win an argument they started by mistake?',
+  'If there was a secret alliance in the room, who would lead it?',
+  'Who would crack first under ten seconds of questioning?',
+  'Who could keep a giant secret for a whole year?',
+  'Who here would absolutely fake being innocent?',
+  'Who would make the best detective in a mystery film?',
+  'Who is most likely to confuse everyone with one sentence?',
+  'Who would sell out their teammate to win a board game?',
+  'Who here gives the most believable fake excuses?',
+  'Who always looks guilty when somebody asks a serious question?',
+  'Who would get caught bluffing in the first five seconds?',
+  'Who is most likely to invent a completely ridiculous alibi?',
+  'Who in this room is secretly the best strategist?',
+  'Who would volunteer to be questioned just to distract everyone?',
+  'Who gives away secrets by smiling at the wrong moment?',
+  'Who in this room would win a lie-detector challenge?',
+  'Who would make the most dramatic courtroom confession?'
+];
+
 function fail(message) { throw new Error(message); }
 function nameOf(value) {
   if (typeof value !== 'string') fail('Enter your name first.');
@@ -66,7 +89,7 @@ class Game {
     const player = playerFor(name, true);
     const room = {
       code, config: options, players: [player], hostId: player.id,
-      status: 'lobby', round: 0, roles: {}, claims: {}, trueSigil: null,
+      status: 'lobby', round: 0, roles: {}, claims: {}, trueSigil: null, challenge: null,
       result: null, deadline: null, paused: false, pausedRemaining: 0,
       lastActivity: this.now()
     };
@@ -178,6 +201,7 @@ class Game {
       room.claims = {};
       room.result = null;
       room.trueSigil = null;
+      room.challenge = null;
       room.deadline = null;
       room.players.forEach(p => { p.score = 0; p.ramaCount = 0; p.ready = p.id === room.hostId; });
     } else if (type === 'leave') {
@@ -206,6 +230,7 @@ class Game {
     const remaining = ROLES.slice(1, room.players.length);
     for (let i = 0; i < others.length; i++) room.roles[others[i].id] = remaining[i];
     room.trueSigil = room.config.mode === 'mystery' ? SIGILS[crypto.randomInt(SIGILS.length)].id : null;
+    room.challenge = room.config.mode === 'mystery' ? COURT_CHALLENGES[crypto.randomInt(COURT_CHALLENGES.length)] : null;
     room.claims = {};
     room.status = 'discussion';
     room.result = null;
@@ -249,6 +274,7 @@ class Game {
       })),
       ramaId: room.status === 'discussion' ? room.players.find(p => room.roles[p.id] === 'Rama')?.id || null : null,
       paused: room.paused, deadline: room.deadline, pausedRemaining: room.pausedRemaining,
+      challenge: room.status === 'discussion' ? room.challenge : null,
       result: ['reveal', 'finished'].includes(room.status) ? room.result : null,
       serverNow: this.now(), sigils: SIGILS
     };
