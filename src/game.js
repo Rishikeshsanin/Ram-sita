@@ -181,6 +181,7 @@ class Game {
       room.deadline = null;
       room.players.forEach(p => { p.score = 0; p.ramaCount = 0; p.ready = p.id === room.hostId; });
     } else if (type === 'leave') {
+      if (playing || room.status === 'reveal') fail('You cannot abandon a seat during a match. Close the tab and return with the same link to reconnect.');
       room.players = room.players.filter(p => p !== player);
       if (player.ws) {
         try { player.ws.send(JSON.stringify({type: 'left'})); player.ws.close(4003, 'Left room'); } catch (_) {}
