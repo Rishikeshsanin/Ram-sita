@@ -40,6 +40,7 @@ test('lobbies reject duplicate names, capacity overflow and nonhost starts',()=>
 test('roles are exclusive, one each, and snapshots never leak other secret identities',()=>{
   const {game,room,host,b,c} = lobby({mode:'mystery'});
   game.act(room,host,'start');
+  assert.ok(typeof room.challenge === 'string' && room.challenge.length > 10);
   assert.deepEqual(Object.values(room.roles).sort(),ROLES.slice(0,3).sort());
   for (const p of [host,b,c]) {
     const state = game.snapshot(room,p);
