@@ -5,38 +5,6 @@ const crypto = require('node:crypto');
 const MIN_PLAYERS = 3;
 const MAX_PLAYERS = 10;
 const ROLES = ['Rama', 'Sita', 'Ravana', 'Lakshmana', 'Hanuman', 'Bharata', 'Shatrughna', 'Sugriva', 'Vibhishana', 'Jatayu'];
-const SIGILS = [
-  { id: 'lotus', symbol: '🪷', name: 'Lotus' },
-  { id: 'moon', symbol: '🌙', name: 'Moon' },
-  { id: 'flame', symbol: '🔥', name: 'Flame' },
-  { id: 'bow', symbol: '🏹', name: 'Bow' },
-  { id: 'sun', symbol: '☀️', name: 'Sun' },
-  { id: 'star', symbol: '⭐', name: 'Star' }
-];
-
-const COURT_CHALLENGES = [
-  'Who in this room has the worst poker face?',
-  'Who would betray the group chat for a plate of biryani?',
-  'Who here looks suspicious even while telling the truth?',
-  'Who is most likely to win an argument they started by mistake?',
-  'If there was a secret alliance in the room, who would lead it?',
-  'Who would crack first under ten seconds of questioning?',
-  'Who could keep a giant secret for a whole year?',
-  'Who here would absolutely fake being innocent?',
-  'Who would make the best detective in a mystery film?',
-  'Who is most likely to confuse everyone with one sentence?',
-  'Who would sell out their teammate to win a board game?',
-  'Who here gives the most believable fake excuses?',
-  'Who always looks guilty when somebody asks a serious question?',
-  'Who would get caught bluffing in the first five seconds?',
-  'Who is most likely to invent a completely ridiculous alibi?',
-  'Who in this room is secretly the best strategist?',
-  'Who would volunteer to be questioned just to distract everyone?',
-  'Who gives away secrets by smiling at the wrong moment?',
-  'Who in this room would win a lie-detector challenge?',
-  'Who would make the most dramatic courtroom confession?'
-];
-
 function fail(message) { throw new Error(message); }
 function nameOf(value) {
   if (typeof value !== 'string') fail('Enter your name first.');
@@ -90,7 +58,7 @@ class Game {
     const player = playerFor(name, true);
     const room = {
       code, config: options, players: [player], hostId: player.id,
-      status: 'lobby', round: 0, roles: {}, claims: {}, trueSigil: null, challenge: null,
+      status: 'lobby', round: 0, roles: {},
       result: null, deadline: null, paused: false, pausedRemaining: 0,
       lastActivity: this.now()
     };
@@ -165,11 +133,6 @@ class Game {
       if (room.players.length < MIN_PLAYERS) fail('At least three friends must join.');
       if (room.players.some(p => !p.connected || !p.ready)) fail('All players must be connected and ready.');
       this.nextRound(room);
-    } else if (type === 'claim') {
-      if (!playing || room.paused || room.config.mode !== 'mystery') fail('Sigil claims are available only during an active mystery round.');
-      if (room.roles[player.id] === 'Rama') fail('Rama does not submit a claim.');
-      if (!SIGILS.some(s => s.id === data.sigil)) fail('Unknown sigil.');
-      room.claims[player.id] = data.sigil;
     } else if (type === 'guess') {
       if (!playing || room.paused) fail('No active guessing round.');
       if (room.roles[player.id] !== 'Rama') fail('Only Rama can make the final guess.');
@@ -199,10 +162,7 @@ class Game {
       room.status = 'lobby';
       room.round = 0;
       room.roles = {};
-      room.claims = {};
       room.result = null;
-      room.trueSigil = null;
-      room.challenge = null;
       room.deadline = null;
       room.players.forEach(p => { p.score = 0; p.ramaCount = 0; p.ready = p.id === room.hostId; });
     } else if (type === 'leave') {
@@ -216,7 +176,6 @@ class Game {
         room.hostId = (room.players.find(p => p.connected) || room.players[0]).id;
         room.players.find(p => p.id === room.hostId).ready = true;
       }
-      if (playing && room.roles[player.id] === 'Rama') this.resolve(room, null, true);
     } else fail('Unknown action.');
     this.touch(room);
   }
@@ -230,9 +189,6 @@ class Game {
     room.roles = {[rama.id]: 'Rama'};
     const remaining = ROLES.slice(1, room.players.length);
     for (let i = 0; i < others.length; i++) room.roles[others[i].id] = remaining[i];
-    room.trueSigil = room.config.mode === 'mystery' ? SIGILS[crypto.randomInt(SIGILS.length)].id : null;
-    room.challenge = room.config.mode === 'mystery' ? COURT_CHALLENGES[crypto.randomInt(COURT_CHALLENGES.length)] : null;
-    room.claims = {};
     room.status = 'discussion';
     room.result = null;
     room.paused = false;
@@ -253,8 +209,7 @@ class Game {
       ramaId: room.players.find(p => room.roles[p.id] === 'Rama')?.id || null,
       sitaId: room.players.find(p => room.roles[p.id] === 'Sita')?.id || null,
       deltas,
-      roles: {...room.roles},
-      trueSigil: room.trueSigil
+      roles: {...room.roles}
     };
     room.deadline = null;
     room.paused = false;
@@ -264,20 +219,17 @@ class Game {
   snapshot(room, player) {
     const isHost = room.hostId === player.id;
     const role = room.status === 'discussion' ? room.roles[player.id] : null;
-    const canKnowSigil = role === 'Rama' || role === 'Sita' || role === 'Ravana';
     return {
       type: 'snapshot',
       code: room.code, status: room.status, round: room.round, config: room.config,
-      hostId: room.hostId, you: {id: player.id, name: player.name, host: isHost, role, secretSigil: canKnowSigil ? room.trueSigil : null},
+      hostId: room.hostId, you: {id: player.id, name: player.name, host: isHost, role},
       players: room.players.map(p => ({
-        id: p.id, name: p.name, score: p.score, connected: p.connected, ready: p.ready,
-        claim: room.status === 'discussion' && room.config.mode === 'mystery' ? room.claims[p.id] || null : null
+        id: p.id, name: p.name, score: p.score, connected: p.connected, ready: p.ready
       })),
       ramaId: room.status === 'discussion' ? room.players.find(p => room.roles[p.id] === 'Rama')?.id || null : null,
       paused: room.paused, deadline: room.deadline, pausedRemaining: room.pausedRemaining,
-      challenge: room.status === 'discussion' ? room.challenge : null,
       result: ['reveal', 'finished'].includes(room.status) ? room.result : null,
-      serverNow: this.now(), sigils: SIGILS
+      serverNow: this.now()
     };
   }
   tick() {
@@ -307,4 +259,4 @@ class Game {
     return changed;
   }
 }
-module.exports = {Game, SIGILS, ROLES, settings, scoreFor, MIN_PLAYERS, MAX_PLAYERS};
+module.exports = {Game, ROLES, settings, scoreFor, MIN_PLAYERS, MAX_PLAYERS};
