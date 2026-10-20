@@ -6,6 +6,7 @@ A mobile-first, real-time Ram–Sita paper-chit game for friends **physically to
 
 - **Classic mode:** Rama must find Sita among the other hidden roles.
 - **Court of Whispers (Mystery mode):** Rama, Sita and Ravana privately know the same royal sigil. Everyone except Rama can publicly claim *any* sigil; Ravana can impersonate Sita. Players debate face-to-face before Rama chooses. There is no automatic truth indicator.
+- **Court Challenges:** Every Mystery round starts with one of 20 funny group questions to spark live interrogation and outrageous alibis.
 - 3–10 players, no signup, room code and shareable invitation URL.
 - Host chooses room size, 3–30 rounds, 20–90-second discussion timer and mode. Host can pause/resume, remove players before starting, and replay.
 - Private role views, server-authoritative shuffles, guesses, scores, timer and reveals; reconnect on reload using local session credentials.
