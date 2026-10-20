@@ -23,9 +23,12 @@ test('game creates six-character unique-looking codes and rejects invalid settin
   assert.throws(()=>game.create('<script>',{}),/Names/);
 });
 test('lobbies reject duplicate names, capacity overflow and nonhost starts',()=>{
-  const {game,room,host,b,c} = lobby({maxPlayers:3});
+  const {game,room,host,b,c} = lobby({maxPlayers:4});
   assert.throws(()=>game.join(room.code,'FRIEND B'),/already/);
-  assert.throws(()=>game.join(room.code,'Another'),/full/);
+  const extra=game.join(room.code,'Another').player;
+  assert.throws(()=>game.join(room.code,'Too many'),/full/);
+  extra.connected=true;
+  game.act(room,extra,'ready',{ready:true});
   assert.throws(()=>game.act(room,b,'start'),/Only the host/);
   game.act(room,c,'ready',{ready:false});
   assert.throws(()=>game.act(room,host,'start'),/ready/);
