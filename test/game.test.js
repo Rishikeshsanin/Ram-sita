@@ -142,3 +142,28 @@ test('leaving during an active match cannot erase the Sita seat or corrupt point
   assert.equal(room.status,'discussion');
   assert.ok(room.players.some(p=>room.roles[p.id]==='Sita'));
 });
+
+test('ten-player court completes thirty rounds with balanced Rama assignments',()=>{
+  const game=new Game();
+  const {room,player:host}=game.create('Host',{maxPlayers:10,totalRounds:30,guessSeconds:20,mode:'mystery'});
+  host.connected=true;
+  for(let i=1;i<10;i++){
+    const p=game.join(room.code,'Player '+i).player;
+    p.connected=true;
+    game.act(room,p,'ready',{ready:true});
+  }
+  assert.equal(room.players.length,10);
+  assert.throws(()=>game.join(room.code,'Eleventh'),/full/);
+  game.act(room,host,'start');
+  for(let i=1;i<=30;i++){
+    assert.equal(room.round,i);
+    assert.deepEqual(Object.values(room.roles).sort(),ROLES.slice().sort());
+    const rama=room.players.find(p=>room.roles[p.id]==='Rama');
+    const sita=room.players.find(p=>room.roles[p.id]==='Sita');
+    game.act(room,rama,'guess',{id:sita.id});
+    game.act(room,host,'next');
+  }
+  assert.equal(room.status,'finished');
+  assert.ok(room.players.every(p=>p.ramaCount===3));
+  assert.ok(room.players.every(p=>Number.isInteger(p.score) && p.score>=0));
+});
