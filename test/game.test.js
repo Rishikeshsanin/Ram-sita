@@ -132,3 +132,13 @@ test('host transfer, reconnection and room expiry do not grant unauthorized acce
   game.tick();
   assert.equal(game.rooms.has(room.code),false);
 });
+
+test('leaving during an active match cannot erase the Sita seat or corrupt points',()=>{
+  const {game,room,host,b,c}=lobby();
+  game.act(room,host,'start');
+  const before=room.players.length;
+  assert.throws(()=>game.act(room,b,'leave'),/cannot abandon/);
+  assert.equal(room.players.length,before);
+  assert.equal(room.status,'discussion');
+  assert.ok(room.players.some(p=>room.roles[p.id]==='Sita'));
+});
