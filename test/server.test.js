@@ -59,7 +59,7 @@ test('three real WebSocket clients complete a classic match with private role sn
     for(const s of states){
       assert.ok(!JSON.stringify(s).includes(token));
       assert.ok(s.players.every(p=>!('role' in p)));
-      assert.equal(s.you.secretSigil,null);
+      assert.equal(Object.hasOwn(s.you,'secretSigil'),false);
     }
     const ramaIdx=states.findIndex(s=>s.you.role==='Rama');
     const sita=states.find(s=>s.you.role==='Sita');
