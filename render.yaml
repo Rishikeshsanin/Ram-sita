@@ -1,0 +1,17 @@
+# Render Blueprint: standalone Classic Ram–Sita, no database or other services.
+# Deploy once from this repository via Render -> New -> Blueprint.
+services:
+  - type: web
+    name: ram-sita-classic
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: main
+    numInstances: 1
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeployTrigger: off
+    envVars:
+      - key: NODE_ENV
+        value: production
