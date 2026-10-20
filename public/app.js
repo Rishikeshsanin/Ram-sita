@@ -48,7 +48,6 @@
   }
   function fmt(n) { return Number(n || 0).toLocaleString('en-IN'); }
   function getName(id) { return snap && snap.players.find(function (p) { return p.id === id; })?.name || 'Unknown player'; }
-  function sigil(id) { return snap?.sigils?.find(function (item) { return item.id === id; }); }
   function toast(message) {
     toastEl.textContent = message;
     toastEl.classList.add('show');
@@ -143,10 +142,7 @@
       '<div class="field"><label for="guessSeconds">Guess timer</label><select id="guessSeconds" name="guessSeconds">' +
       [20,30,45,60,75,90].map(function(n){return '<option value="'+n+'"'+(config.guessSeconds === n?' selected':'')+'>'+n+' seconds</option>';}).join('') +
       '</select></div>' +
-      '<div class="field"><label for="mode">Game mode</label><select id="mode" name="mode">' +
-      '<option value="classic"'+(config.mode === 'classic'?' selected':'')+'>Classic</option>' +
-      '<option value="mystery"'+(config.mode === 'mystery'?' selected':'')+'>Court of Whispers</option>' +
-      '</select></div></div>';
+      '</div>';
   }
   function renderHome() {
     const roomFromLink = (new URLSearchParams(location.search).get('room') || '').toUpperCase();
@@ -164,7 +160,7 @@
       (tab==='create' ?
         '<form id="createForm"><div class="field"><label for="playerName">Your display name</label><input required maxlength="20" id="playerName" name="name" autocomplete="nickname" placeholder="e.g. Rishi" value="'+esc(name)+'"></div>' +
         settingsFields({maxPlayers:6,totalRounds:7,guessSeconds:45,mode:'classic'}) +
-        '<div class="mode-note">Classic = pure paper-chit guessing. Court of Whispers = secret sigil, public bluffing, and the same classic point rules.</div>' +
+        '<div class="mode-note">Classic Ram–Sita: everyone gets one secret character. Rama must find Sita. Bluff, laugh and reveal the cards together!</div>' +
         '<button type="submit" class="btn primary wide">Create my room ✦</button></form>' :
         '<form id="joinForm"><div class="field"><label for="joinName">Your display name</label><input required maxlength="20" id="joinName" name="name" autocomplete="nickname" placeholder="e.g. Rishi" value="'+esc(name)+'"></div>' +
         '<div class="field"><label for="roomCode">Six-character room code</label><input required minlength="6" maxlength="6" id="roomCode" name="code" autocapitalize="characters" spellcheck="false" placeholder="ABC234" value="'+esc(roomFromLink)+'"></div>' +
@@ -195,8 +191,8 @@
       '<p class="muted" style="font-size:12px;margin:13px 0 0">'+(host? (snap.players.length<3?'At least 3 players are needed.':ready?'Your court is ready to go.':'Everyone must be online and ready before starting.'):'The host will start the game when everyone is ready.')+'</p></section></div>' +
       '<aside class="card"><div class="eyebrow">Game setup</div>' +
       (host ? '<form id="configForm">'+settingsFields(snap.config)+'<button class="btn outline wide" type="submit">Save settings</button></form>' :
-        '<p><b>'+esc(snap.config.mode==='classic'?'Classic':'Court of Whispers')+'</b></p><p class="muted">'+snap.config.totalRounds+' rounds · '+snap.config.guessSeconds+' seconds per round</p><p class="muted" style="font-size:12px">The host decides all settings.</p>') +
-      '<div class="mode-note" style="margin-top:19px">Keep your screens private. Talk to your friends, not the app. In Mystery Mode, your sigil claims are public — your actual role never is.</div></aside></div>';
+        '<p><b>'+esc'Classic'+'</b></p><p class="muted">'+snap.config.totalRounds+' rounds · '+snap.config.guessSeconds+' seconds per round</p><p class="muted" style="font-size:12px">The host decides all settings.</p>') +
+      '<div class="mode-note" style="margin-top:19px">Keep your cards private until the reveal. Talk, accuse and bluff face-to-face!</div></aside></div>';
   }
   function roleMarkup() {
     const role = snap.you.role;
@@ -205,19 +201,6 @@
     if (!cardOpen) return '<div class="role-card sealed"><div class="card-caption">Your sealed character</div><span class="glyph">🂠</span><div class="role-title">Secret Role</div><p>Make sure only you can see your phone.</p><div class="spacer16"></div><button class="btn primary" data-action="flip">Reveal my card</button></div>';
     return '<div class="role-card"><div class="card-caption">For your eyes only</div><span class="glyph">'+info[0]+'</span><div class="role-title">'+esc(role)+'</div><p>'+esc(info[1])+'</p><div class="spacer16"></div><button class="btn small outline" data-action="flip">Hide card</button></div>';
   }
-  function mysteryArea() {
-    if (snap.config.mode !== 'mystery') return '';
-    const role = snap.you.role;
-    const actual = sigil(snap.you.secretSigil);
-    const intro = actual ? '<div class="clue-box"><strong>Your private royal sigil: '+actual.symbol+' '+esc(actual.name)+'</strong><p>Only Rama, Sita and Ravana know the actual symbol. Nobody can tell whether you are telling the truth. Do not show this screen!</p></div>' :
-      '<div class="clue-box"><strong>🕵️ No sigil revealed to you</strong><p>You can make up any claim. Try to bluff Rama and protect your identity.</p></div>';
-    if (role === 'Rama') return intro+'<p class="muted" style="font-size:12px;margin-top:10px">Watch the public claims below. Sita and Ravana both know the true sigil, so a matching claim is not proof.</p>';
-    const myClaim = snap.players.find(function(p){return p.id===snap.you.id;})?.claim;
-    return intro + '<h3 style="margin-top:20px">Your public sigil claim</h3><p class="muted" style="font-size:12px">Pick one symbol. You may change it until Rama locks a guess.</p><div class="sigils">' +
-      snap.sigils.map(function(item) {
-        return '<button class="sigil-choice '+(myClaim===item.id?'chosen':'')+'" data-action="claim" data-sigil="'+esc(item.id)+'"'+(snap.paused?' disabled':'')+'><span class="sigil-emoji">'+item.symbol+'</span><span class="sigil-label">'+esc(item.name)+'</span></button>';
-      }).join('')+'</div>';
-  }
   function ramaControls() {
     if (snap.you.role !== 'Rama') {
       return '<div class="mode-note">🎭 Talk face-to-face. Convince Rama you are not Sita. Bluffing is completely allowed.</div>';
@@ -225,24 +208,20 @@
     const candidates = snap.players.filter(function(p) { return p.id !== snap.you.id; });
     return '<h3>Who is really Sita?</h3><p class="muted" style="font-size:12px">Question your friends aloud, then select one final suspect. You only get one guess.</p>' +
       '<div class="candidates">' + candidates.map(function(p) {
-        const claim = sigil(p.claim);
         return '<button class="candidate '+(selected===p.id?'selected':'')+'" data-action="select" data-id="'+esc(p.id)+'"'+(snap.paused?' disabled':'')+'>' +
           '<span class="avatar">'+esc(p.name.charAt(0).toUpperCase())+'</span><span>'+esc(p.name)+'</span>' +
-          (snap.config.mode==='mystery'?'<span class="sigil-claim" title="Public claim">'+(claim?claim.symbol:'❔')+'</span>':'') +
           '</button>';
       }).join('')+'</div><button class="btn primary wide" data-action="guess"'+(!selected||snap.paused?' disabled':'')+'>Lock my final guess →</button>' +
       '<p class="muted center" style="font-size:11px;margin-top:9px">Once you lock it, there is no going back.</p>';
   }
   function renderDiscussion() {
     const rama = getName(snap.ramaId);
-    return '<div class="round-banner"><div><div class="eyebrow">Round '+snap.round+' of '+snap.config.totalRounds+' · '+(snap.config.mode==='classic'?'Classic':'Court of Whispers')+'</div><h2>The search for Sita</h2></div>' +
+    return '<div class="round-banner"><div><div class="eyebrow">Round '+snap.round+' of '+snap.config.totalRounds+' · '+'Classic'+'</div><h2>The search for Sita</h2></div>' +
       '<div class="timer-wrap"><span class="muted">Time left</span><span id="timer" class="timer">--</span></div></div>' +
       '<div class="track"><div id="timer-fill" class="track-fill"></div></div>' +
       (snap.paused?'<div class="alert-note">⏸ The host has paused the round. Discussion and guessing are temporarily frozen.</div>':'') +
-      (snap.challenge?'<div class="court-challenge"><span class="challenge-symbol">⚖️</span><div><b>THE COURT CHALLENGE</b><p>'+esc(snap.challenge)+'</p><small>Everyone answers out loud. Bluffing encouraged.</small></div></div>':'') +
       '<div class="columns"><div class="card"><div class="space-between"><span class="pill">🏹 Rama: '+esc(rama)+'</span><span class="muted" style="font-size:12px">One guess only</span></div>' +
       '<div class="role-stage">'+roleMarkup()+'</div>' +
-      (snap.config.mode==='mystery'?mysteryArea():'') +
       '<div class="spacer16"></div>'+ramaControls()+'</div>' +
       '<aside class="card"><div class="space-between"><h3>Live standings</h3><span class="muted" style="font-size:11px">Round '+snap.round+'</span></div>'+scoreList(snap.players) +
       '<div class="spacer16"></div><p class="muted" style="font-size:12px">Everyone else can see Rama’s identity, but only you can see your own secret role.</p>' +
@@ -262,7 +241,6 @@
         return '<div class="reveal-person"><span class="face">'+(FACES[role]?.[0]||'🃏')+'</span><div><div class="name">'+esc(p.name)+(p.id===snap.you.id?' (you)':'')+'</div>' +
           '<div class="role">'+esc(role)+'</div><div class="points">+'+fmt(result.deltas[p.id])+' points</div></div></div>';
       }).join('')+'</div>' +
-      (snap.config.mode==='mystery'?'<div class="clue-box">Real royal sigil: <strong>'+(sigil(result.trueSigil)?.symbol||'')+' '+esc(sigil(result.trueSigil)?.name||'')+'</strong></div>':'') +
       '<div class="actions">' + (snap.you.host?'<button class="btn primary" data-action="next">'+(snap.round===snap.config.totalRounds?'See the champions 🏆':'Next round →')+'</button>':'<p class="muted">The host will begin the next round.</p>') + '</div></section>' +
       '<aside class="card"><h3>Current standings</h3>'+scoreList(snap.players)+'</aside></div>';
   }
@@ -316,8 +294,7 @@
     } else if (action==='ready') {
       const me = snap?.players.find(function(p){return p.id===snap.you.id;});
       send({type:'ready', ready:!me?.ready});
-    } else if (action==='claim') send({type:'claim', sigil:el.dataset.sigil});
-    else if (action==='start' || action==='next' || action==='rematch' || action==='pause') send({type:action});
+    } else if (action==='start' || action==='next' || action==='rematch' || action==='pause') send({type:action});
     else if (action==='kick') {
       if (confirm('Remove '+getName(el.dataset.id)+' from the lobby?')) send({type:'kick', id:el.dataset.id});
     } else if (action==='leave') {
@@ -345,12 +322,12 @@
       localStorage.setItem(NAME_STORE, data.name.trim());
       if (form.id==='createForm') doEntry({type:'create', name:data.name,config:{
         maxPlayers:Number(data.maxPlayers),totalRounds:Number(data.totalRounds),
-        guessSeconds:Number(data.guessSeconds),mode:data.mode
+        guessSeconds:Number(data.guessSeconds),mode:'classic'
       }});
       else doEntry({type:'join', name:data.name,code:data.code.trim().toUpperCase()});
     } else {
       send({type:'config',maxPlayers:Number(data.maxPlayers),totalRounds:Number(data.totalRounds),
-        guessSeconds:Number(data.guessSeconds),mode:data.mode});
+        guessSeconds:Number(data.guessSeconds),mode:'classic'});
     }
   });
   setInterval(updateClock, 200);
