@@ -110,6 +110,7 @@ function startServer(port = Number(process.env.PORT ?? 3000), game = new Game())
           send(ws, {type: 'session', code: room.code, token: player.token});
           broadcast(room);
         } else {
+          if (player.ws !== ws || !room.players.includes(player)) throw new Error('This seat moved to another tab or was removed.');
           if (['create', 'join', 'resume'].includes(msg.type)) throw new Error('You already have a seat.');
           game.act(room, player, msg.type, msg);
           broadcast(room);
