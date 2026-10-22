@@ -81,8 +81,8 @@
       if (packet.type === 'session') {
         persist({code:packet.code, token:packet.token});
       } else if (packet.type === 'snapshot') {
-        const key = packet.code + ':' + packet.round + ':' + packet.status;
-        if (packet.status === 'discussion' && key !== lastRoundKey) {
+        const key = packet.code + ':' + packet.round;
+        if (['dealing', 'discussion'].includes(packet.status) && key !== lastRoundKey) {
           selected = null;
           cardOpen = false;
         }
@@ -107,14 +107,32 @@
       }
     };
     socket.onerror = function () {};
-    socket.onclose = function () {
+    socket.onclose = function (event) {
       if (socket !== thisSocket) return;
       socket = null;
       setConnection('offline');
       cardOpen = false;
+      // A different browser tab now owns this seat; avoid both tabs reconnecting forever.
+      if (event.code === 4001) {
+        snap = null;
+        toast('This game is open in another tab. Refresh here only if you want to switch back.');
+        view.innerHTML = '<section class="card center"><h2>Playing in another tab</h2><p class="muted">Your seat moved to another tab or device. You can keep playing there, or refresh this page to take it back.</p></section>';
+        return;
+      }
+      if ([4002,4003,4004].includes(event.code)) {
+        persist(null);
+        snap = null;
+        lastRoundKey = null;
+        toast(event.code === 4004 ? 'This room expired. Start a new game.' : 'You left the room.');
+        render();
+        return;
+      }
       if (saved) {
         render();
         reconnectTimer = setTimeout(connect, 1600);
+      } else {
+        render();
+        toast('Connection interrupted. Try joining again.');
       }
     };
   }
@@ -214,6 +232,22 @@
       }).join('')+'</div><button class="btn primary wide" data-action="guess"'+(!selected||snap.paused?' disabled':'')+'>Lock my final guess →</button>' +
       '<p class="muted center" style="font-size:11px;margin-top:9px">Once you lock it, there is no going back.</p>';
   }
+  function renderDealing() {
+    const mine = snap.players.find(function(p){return p.id === snap.you.id;});
+    const readyCount = snap.players.filter(function(p){return p.roleReady;}).length;
+    return '<div class="section-head"><div><div class="eyebrow">Round '+snap.round+' of '+snap.config.totalRounds+'</div><h2>Check your secret card</h2>' +
+      '<p class="muted">No timer yet. Everybody privately checks their role and confirms they are ready.</p></div><span class="pill">🏹 Rama: '+esc(getName(snap.ramaId))+'</span></div>' +
+      '<div class="columns"><section class="card"><div class="role-stage">'+roleMarkup()+'</div>' +
+      (mine.roleReady ?
+        '<div class="mode-note center">✓ You are ready! Keep your character secret. Waiting for everyone else…</div>' :
+        '<button class="btn primary wide" data-action="role-ready"'+(!cardOpen?' disabled':'')+'>I have seen my card — Ready!</button>' +
+        (!cardOpen?'<p class="muted center" style="font-size:12px;margin-top:10px">Reveal your card privately to enable Ready.</p>':'')) +
+      '</section><aside class="card"><h3>Preparing the round</h3><p class="muted">'+readyCount+' of '+snap.players.length+' players ready.</p>' +
+      '<div class="scores">'+snap.players.map(function(p) {
+        return '<div class="score-row"><span class="score-name">'+esc(p.name)+(p.id===snap.you.id?' (you)':'')+'</span>' +
+          '<span class="'+(p.roleReady?'highlight':'muted')+'" style="font-size:12px">'+(!p.connected?'Offline':p.roleReady?'✓ Ready':'Checking card')+'</span></div>';
+      }).join('')+'</div><div class="mode-note" style="margin-top:16px">The '+snap.config.guessSeconds+'-second countdown begins only when everybody is connected and ready. Nobody loses guessing time while opening cards.</div></aside></div>';
+  }
   function renderDiscussion() {
     const rama = getName(snap.ramaId);
     return '<div class="round-banner"><div><div class="eyebrow">Round '+snap.round+' of '+snap.config.totalRounds+' · '+'Classic'+'</div><h2>The search for Sita</h2></div>' +
@@ -260,6 +294,7 @@
         '<div class="card center" style="max-width:520px;margin:45px auto"><h2>Returning to the court…</h2><p class="muted">Restoring your secret character and seat.</p><button class="btn ghost" data-action="forget">Forget this room</button></div>' :
         renderHome();
     } else if (snap.status==='lobby') view.innerHTML = renderLobby();
+    else if (snap.status==='dealing') view.innerHTML = renderDealing();
     else if (snap.status==='discussion') view.innerHTML = renderDiscussion();
     else if (snap.status==='reveal') view.innerHTML = renderReveal();
     else if (snap.status==='finished') view.innerHTML = renderFinished();
@@ -277,7 +312,7 @@
     if (fill) fill.style.width = (100 * Math.min(1,remaining/snap.config.guessSeconds)) + '%';
   }
   document.addEventListener('visibilitychange', function() {
-    if (document.hidden) { cardOpen = false; if(snap?.status==='discussion') render(); }
+    if (document.hidden) { cardOpen = false; if(['dealing','discussion'].includes(snap?.status)) render(); }
   });
   document.addEventListener('click', function (event) {
     const el = event.target.closest('[data-action]');
@@ -288,6 +323,7 @@
       render();
       document.getElementById('entry')?.scrollIntoView({behavior:'smooth', block:'nearest'});
     } else if (action==='flip') { cardOpen = !cardOpen; render(); }
+    else if (action==='role-ready') { cardOpen = false; send({type:'role_ready',ready:true}); }
     else if (action==='select') { selected = el.dataset.id; render(); }
     else if (action==='guess') {
       if (selected && confirm('Lock your final guess as '+getName(selected)+'? This cannot be undone.')) send({type:'guess', id:selected});
