@@ -6,10 +6,11 @@
 
 1. The host creates a private room and chooses **3–10 players**, **3–30 rounds**, and a **20–90-second** guessing timer.
 2. Friends join with the six-character code or invite link, type a name, and tap **Ready**.
-3. Each player privately flips their secret character card. **Rama** is announced publicly.
-4. Everyone talks face-to-face and can bluff. Rama selects the person they think is **Sita** before the timer ends.
-5. All characters are revealed together. Everyone earns points, then the host starts the next round.
-6. After the configured number of rounds, the leaderboard crowns the winner. Rematches reuse the same room.
+3. The host starts the match. Everyone receives one **secret character** and sees a sealed card. **Rama's name** is publicly announced; other identities stay private.
+4. Everyone taps **Reveal my card** privately, reads their character, then taps **I have seen my card — Ready!**. There is **no countdown during this stage**.
+5. When **all connected players** have confirmed their cards, the host's selected timer begins automatically. Everyone talks and bluffs aloud. Only Rama can make **one final guess** of who has Sita.
+6. If Rama guesses or the timer expires, everyone's roles are revealed and the server awards the round points. The host taps **Next round**; each new round also has a private-card confirmation stage.
+7. When the chosen rounds are over, highest cumulative score wins (ties share first place). Host may start a **rematch** in the same lobby; everyone readies up again.
 
 The first release is **Classic only**. No mystery symbols, missions, or experimental mechanics. We can consider them as an optional separate mode later.
 
@@ -41,7 +42,7 @@ Open http://localhost:3000. To connect phones on the same Wi-Fi, start the app o
 
 ## Deploy
 
-The standalone app requires a **single persistent WebSocket-capable Node.js host** and includes a `Dockerfile`, `render.yaml` and `/health` endpoint.
+**Play the deployed game:** https://ram-sita-classic.onrender.com . The app requires a **single persistent WebSocket-capable Node.js host** and includes a `Dockerfile`, `render.yaml` and `/health` endpoint.
 
 ### Render fallback (prepared)
 
@@ -68,10 +69,13 @@ Minglecade is a **directory**, not a game server: its Play link opens the standa
 
 ## Tests
 
-GitHub Actions runs JavaScript syntax checks, unit tests and a real three-client WebSocket match after each push:
+GitHub Actions runs JavaScript syntax checks, unit tests, a real three-client WebSocket match, and Chromium browser end-to-end tests after each push:
 
 ```bash
 npm run check && npm test
+# For local Chromium browser tests (install browser once):
+npx playwright install chromium
+npm run test:browser
 ```
 
 See [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) for the scope and deferred ideas.

@@ -6,10 +6,10 @@ A fast, phone-based version of the childhood Ram–Sita paper-chit game. **Every
 ## V1 — Classic only
 1. Host creates a room for 3–10 friends and chooses 3–30 rounds plus a 20–90-second guessing timer.
 2. Friends use a private room code or invitation link, choose names and ready up.
-3. Server shuffles one distinct character to each player. Everyone can view only their own card; Rama is publicly identified.
-4. Players may bluff in person. Rama makes one final Sita guess (or the clock expires).
-5. The server reveals roles and awards points under the documented house scoring; host advances the round.
-6. At the end, scores determine winner(s). A rematch starts a fresh match in the same room.
+3. The server shuffles one distinct character per player and enters **dealing** (private-card confirmation). Everyone sees a sealed card; Rama's identity is public.
+4. Each player privately reveals their own card, then taps Ready. **The timer is not running yet**. Only when every connected player has confirmed does the server enter **discussion** and begin the host-selected countdown.
+5. Players bluff face-to-face; only Rama may lock a single Sita guess. If time expires first, the round resolves as a missed guess.
+6. The server reveals roles and awards points using the documented house scoring. The host advances to a new deal. At the final round, scores determine the winner(s); rematch returns everyone to the lobby.
 
 **No symbols, hidden missions, wagering, or experimental characters** in Classic V1.
 
@@ -23,7 +23,7 @@ A fast, phone-based version of the childhood Ram–Sita paper-chit game. **Every
 ## Known limitations / launch criteria
 - A deployment or free-host sleep/restart clears the current rooms. A paid always-on instance or durable storage can be considered later if necessary.
 - A stable public URL cannot be added to Minglecade before the game deploys and passes an end-to-end public join test.
-- Run automated checks and WebSocket integration tests; then test same-room gameplay on actual phones over distinct connections, including 3-player and larger groups, lock-in, timeouts, pause/resume, refresh/reconnect, rematches, and responsive layouts.
+- Automated checks include unit tests, WebSocket integration tests, and a real Chromium three-browser happy-path test (3 rounds, rematch, 320/390/768/1200px layouts). These tests do **not** replace a physical multi-phone test on unstable mobile data. Re-check timeouts, pause/resume, disconnections, host transfer, and free-host wake-up before declaring this production-stable.
 - Regional paper-chit scoring differs. Our first release uses the clearly published house rules in README.
 - Avoid claiming physical-phone testing, production uptime, or Minglecade publication until verified.
 

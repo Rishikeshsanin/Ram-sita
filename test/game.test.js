@@ -14,6 +14,12 @@ function lobby({mode='classic', totalRounds=7, maxPlayers=6} = {}) {
   game.act(room,c,'ready',{ready:true});
   return {game,room,host,b,c,forward:ms => {now+=ms;}};
 }
+function confirmCards(game,room) {
+  assert.equal(room.status,'dealing');
+  assert.equal(room.deadline,null);
+  for(const p of room.players) game.act(room,p,'role_ready',{ready:true});
+  assert.equal(room.status,'discussion');
+}
 test('game creates six-character unique-looking codes and rejects invalid settings',()=>{
   const game = new Game();
   const {room} = game.create('Host',{maxPlayers:3,totalRounds:7,guessSeconds:45,mode:'classic'});
@@ -35,12 +41,14 @@ test('lobbies reject duplicate names, capacity overflow and nonhost starts',()=>
   assert.throws(()=>game.act(room,host,'start'),/ready/);
   game.act(room,c,'ready',{ready:true});
   game.act(room,host,'start');
+  confirmCards(game,room);
   assert.equal(room.status,'discussion');
   assert.equal(room.round,1);
 });
 test('classic roles are exclusive and snapshots never leak another identity',()=>{
   const {game,room,host,b,c} = lobby();
   game.act(room,host,'start');
+  confirmCards(game,room);
   assert.equal(room.config.mode,'classic');
   assert.deepEqual(Object.values(room.roles).sort(),ROLES.slice(0,3).sort());
   for (const p of [host,b,c]) {
@@ -65,6 +73,7 @@ test('the public release has no symbols, mystery mode or sigil actions',()=>{
     game.act(room,p,'ready',{ready:true});
   }
   game.act(room,host,'start');
+  confirmCards(game,room);
   assert.equal(Object.hasOwn(room,'trueSigil'),false);
   assert.equal(Object.hasOwn(room,'challenge'),false);
   for (const p of room.players) {
@@ -77,6 +86,7 @@ test('the public release has no symbols, mystery mode or sigil actions',()=>{
 test('only Rama guesses and the server awards fixed role scores',()=>{
   const {game,room,host,b,c}=lobby();
   game.act(room,host,'start');
+  confirmCards(game,room);
   const players=[host,b,c];
   const rama=players.find(p=>room.roles[p.id]==='Rama');
   const sita=players.find(p=>room.roles[p.id]==='Sita');
@@ -92,6 +102,7 @@ test('only Rama guesses and the server awards fixed role scores',()=>{
 test('host can pause timer and expiry is server-authoritative',()=>{
   const {game,room,host,forward}=lobby();
   game.act(room,host,'start');
+  confirmCards(game,room);
   forward(10000);
   game.act(room,host,'pause');
   assert.equal(room.pausedRemaining,20000);
@@ -107,6 +118,7 @@ test('host can pause timer and expiry is server-authoritative',()=>{
 test('Rama rotates before repeating, host advances and rematch clears scores',()=>{
   const {game,room,host}=lobby({totalRounds:3});
   game.act(room,host,'start');
+  confirmCards(game,room);
   const ramaHistory=[];
   for(let n=0;n<3;n++){
     ramaHistory.push(Object.keys(room.roles).find(id=>room.roles[id]==='Rama'));
@@ -114,6 +126,7 @@ test('Rama rotates before repeating, host advances and rematch clears scores',()
     const sita=room.players.find(p=>room.roles[p.id]==='Sita');
     game.act(room,rama,'guess',{id:sita.id});
     game.act(room,host,'next');
+    if (room.status === 'dealing') confirmCards(game,room);
   }
   assert.equal(new Set(ramaHistory).size,3);
   assert.equal(room.status,'finished');
@@ -139,6 +152,7 @@ test('host transfer, reconnection and room expiry do not grant unauthorized acce
 test('leaving during an active match cannot erase the Sita seat or corrupt points',()=>{
   const {game,room,host,b,c}=lobby();
   game.act(room,host,'start');
+  confirmCards(game,room);
   const before=room.players.length;
   assert.throws(()=>game.act(room,b,'leave'),/cannot abandon/);
   assert.equal(room.players.length,before);
@@ -158,6 +172,7 @@ test('ten-player court completes thirty rounds with balanced Rama assignments',(
   assert.equal(room.players.length,10);
   assert.throws(()=>game.join(room.code,'Eleventh'),/full/);
   game.act(room,host,'start');
+  confirmCards(game,room);
   for(let i=1;i<=30;i++){
     assert.equal(room.round,i);
     assert.deepEqual(Object.values(room.roles).sort(),ROLES.slice().sort());
@@ -165,8 +180,44 @@ test('ten-player court completes thirty rounds with balanced Rama assignments',(
     const sita=room.players.find(p=>room.roles[p.id]==='Sita');
     game.act(room,rama,'guess',{id:sita.id});
     game.act(room,host,'next');
+    if (room.status === 'dealing') confirmCards(game,room);
   }
   assert.equal(room.status,'finished');
   assert.ok(room.players.every(p=>p.ramaCount===3));
   assert.ok(room.players.every(p=>Number.isInteger(p.score) && p.score>=0));
+});
+
+test('players read roles before the timer; only the last confirmed player starts guessing',()=>{
+  const {game,room,host,b,c,forward}=lobby();
+  game.act(room,host,'start');
+  assert.equal(room.status,'dealing');
+  assert.equal(room.deadline,null);
+  const first=game.snapshot(room,host);
+  assert.ok(first.you.role);
+  assert.ok(first.players.every(p=>!Object.hasOwn(p,'role')));
+  assert.equal(first.ramaId,room.players.find(p=>room.roles[p.id]==='Rama').id);
+  assert.throws(()=>game.act(room,host,'guess',{id:b.id}),/No active guessing round/);
+  forward(120000);
+  assert.deepEqual(game.tick(),[]);
+  game.act(room,host,'role_ready',{ready:true});
+  game.act(room,b,'role_ready',{ready:true});
+  assert.equal(room.status,'dealing');
+  assert.equal(game.snapshot(room,c).players.filter(p=>p.roleReady).length,2);
+  game.act(room,c,'role_ready',{ready:true});
+  assert.equal(room.status,'discussion');
+  assert.equal(room.deadline,220000 + 30000);
+  assert.throws(()=>game.act(room,b,'role_ready',{ready:true}),/only before guessing/);
+});
+
+test('a ready disconnected player blocks the timer until returning',()=>{
+  const {game,room,host,b,c}=lobby();
+  game.act(room,host,'start');
+  b.connected=false;
+  b.disconnectedAt=100000;
+  for(const p of [host,b,c]) game.act(room,p,'role_ready',{ready:true});
+  assert.equal(room.status,'dealing');
+  const socket={readyState:1,close(){}};
+  game.attach(room,b,socket);
+  assert.equal(room.status,'discussion');
+  assert.equal(room.deadline,130000);
 });
