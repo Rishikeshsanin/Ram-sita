@@ -11,9 +11,13 @@
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "test": "node --test",
-    "check": "node --check src/game.js && node --check src/server.js && node --check public/app.js"
+    "check": "node --check src/game.js && node --check src/server.js && node --check public/app.js",
+    "test:browser": "playwright test"
   },
   "dependencies": {
     "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
   }
 }
