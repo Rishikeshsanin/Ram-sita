@@ -51,8 +51,13 @@ test('three real WebSocket clients complete a classic match with private role sn
     b.send(JSON.stringify({type:'ready',ready:true}));
     c.send(JSON.stringify({type:'ready',ready:true}));
     await allReady;
-    const statesWait=clients.map(ws=>packet(ws,p=>p.type==='snapshot' && p.status==='discussion'));
+    const dealWait=clients.map(ws=>packet(ws,p=>p.type==='snapshot' && p.status==='dealing'));
     host.send(JSON.stringify({type:'start'}));
+    const dealt=await Promise.all(dealWait);
+    assert.ok(dealt.every(s=>s.deadline===null));
+    assert.ok(dealt.every(s=>s.you.role && !s.players.some(p=>'role' in p)));
+    const statesWait=clients.map(ws=>packet(ws,p=>p.type==='snapshot' && p.status==='discussion'));
+    clients.forEach(ws=>ws.send(JSON.stringify({type:'role_ready',ready:true})));
     const states=await Promise.all(statesWait);
     const roles=states.map(s=>s.you.role);
     assert.deepEqual(roles.slice().sort(),['Rama','Ravana','Sita'].sort());
