@@ -58,7 +58,7 @@ class Game {
     const player = playerFor(name, true);
     const room = {
       code, config: options, players: [player], hostId: player.id,
-      status: 'lobby', round: 0, roles: {},
+      status: 'lobby', round: 0, roles: {}, roleReady: {},
       result: null, deadline: null, paused: false, pausedRemaining: 0,
       lastActivity: this.now()
     };
@@ -98,6 +98,10 @@ class Game {
     player.ws = ws;
     player.connected = true;
     player.disconnectedAt = null;
+    // When the last disconnected ready player returns, the round can begin safely.
+    if (room.status === 'dealing' && room.players.every(p => p.connected && room.roleReady[p.id])) {
+      this.startDiscussion(room);
+    }
     this.touch(room);
   }
   detach(room, player, ws) {
@@ -133,6 +137,10 @@ class Game {
       if (room.players.length < MIN_PLAYERS) fail('At least three friends must join.');
       if (room.players.some(p => !p.connected || !p.ready)) fail('All players must be connected and ready.');
       this.nextRound(room);
+    } else if (type === 'role_ready') {
+      if (room.status !== 'dealing') fail('You can confirm your character only before guessing starts.');
+      room.roleReady[player.id] = !!data.ready;
+      if (room.players.every(p => p.connected && room.roleReady[p.id])) this.startDiscussion(room);
     } else if (type === 'guess') {
       if (!playing || room.paused) fail('No active guessing round.');
       if (room.roles[player.id] !== 'Rama') fail('Only Rama can make the final guess.');
@@ -162,6 +170,7 @@ class Game {
       room.status = 'lobby';
       room.round = 0;
       room.roles = {};
+      room.roleReady = {};
       room.result = null;
       room.deadline = null;
       room.players.forEach(p => { p.score = 0; p.ramaCount = 0; p.ready = p.id === room.hostId; });
@@ -189,10 +198,16 @@ class Game {
     room.roles = {[rama.id]: 'Rama'};
     const remaining = ROLES.slice(1, room.players.length);
     for (let i = 0; i < others.length; i++) room.roles[others[i].id] = remaining[i];
-    room.status = 'discussion';
+    room.roleReady = {};
+    room.status = 'dealing';
     room.result = null;
     room.paused = false;
     room.pausedRemaining = 0;
+    room.deadline = null;
+  }
+  startDiscussion(room) {
+    if (room.status !== 'dealing') return;
+    room.status = 'discussion';
     room.deadline = this.now() + room.config.guessSeconds * 1000;
   }
   resolve(room, guessedId, timedOut) {
@@ -218,15 +233,16 @@ class Game {
   }
   snapshot(room, player) {
     const isHost = room.hostId === player.id;
-    const role = room.status === 'discussion' ? room.roles[player.id] : null;
+    const role = ['dealing', 'discussion'].includes(room.status) ? room.roles[player.id] : null;
     return {
       type: 'snapshot',
       code: room.code, status: room.status, round: room.round, config: room.config,
       hostId: room.hostId, you: {id: player.id, name: player.name, host: isHost, role},
       players: room.players.map(p => ({
-        id: p.id, name: p.name, score: p.score, connected: p.connected, ready: p.ready
+        id: p.id, name: p.name, score: p.score, connected: p.connected, ready: p.ready,
+        roleReady: room.status === 'dealing' ? !!room.roleReady[p.id] : null
       })),
-      ramaId: room.status === 'discussion' ? room.players.find(p => room.roles[p.id] === 'Rama')?.id || null : null,
+      ramaId: ['dealing', 'discussion'].includes(room.status) ? room.players.find(p => room.roles[p.id] === 'Rama')?.id || null : null,
       paused: room.paused, deadline: room.deadline, pausedRemaining: room.pausedRemaining,
       result: ['reveal', 'finished'].includes(room.status) ? room.result : null,
       serverNow: this.now()
