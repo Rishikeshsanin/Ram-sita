@@ -39,6 +39,51 @@ Remember folding little paper chits, hiding your character, and trying *not* to 
 | ⏳ **Fair rounds** | 🏆 **Live leaderboard** | 🔗 **Instant rooms** |
 | Everyone checks their card **before** the countdown begins. | Points add up automatically; rematches keep the gang together. | Create a code, share a link, **no accounts required**. |
 
+## 📸 See the game in action
+
+These are **actual screenshots from a completed three-player game running in Chromium**, not concept art or UI mockups. We capture the real interface automatically: from creating a room all the way to the final leaderboard.
+
+<p align="center">
+  <a href="docs/screenshots/01-home-desktop.png"><img src="docs/screenshots/01-home-desktop.png" alt="Ram–Sita desktop homepage with royal-themed hero and room setup" width="100%" /></a>
+</p>
+
+<div align="center"><sub>THE ROYAL WELCOME · DESKTOP</sub></div>
+
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <a href="docs/screenshots/02-home-mobile.png"><img src="docs/screenshots/02-home-mobile.png" alt="Ram–Sita mobile home screen with Create Room and Join Friends" width="100%" /></a>
+      <p align="center"><strong>01 · Mobile home</strong><br/><sub>Play on your own phone</sub></p>
+    </td>
+    <td width="33%" valign="top">
+      <a href="docs/screenshots/03-lobby-mobile.png"><img src="docs/screenshots/03-lobby-mobile.png" alt="Three players in a private Ram–Sita room, ready to play" width="100%" /></a>
+      <p align="center"><strong>02 · Private lobby</strong><br/><sub>Friends join with a code</sub></p>
+    </td>
+    <td width="33%" valign="top">
+      <a href="docs/screenshots/04-private-card-mobile.png"><img src="docs/screenshots/04-private-card-mobile.png" alt="Privately revealed Sita character card before guessing begins" width="100%" /></a>
+      <p align="center"><strong>03 · Secret character</strong><br/><sub>Only you see your role</sub></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="33%" valign="top">
+      <a href="docs/screenshots/05-rama-guess-mobile.png"><img src="docs/screenshots/05-rama-guess-mobile.png" alt="Rama choosing a suspected Sita during a timed guessing round" width="100%" /></a>
+      <p align="center"><strong>04 · The final guess</strong><br/><sub>One choice, no do-overs</sub></p>
+    </td>
+    <td width="33%" valign="top">
+      <a href="docs/screenshots/06-role-reveal-mobile.png"><img src="docs/screenshots/06-role-reveal-mobile.png" alt="Round result showing revealed characters and updated scores" width="100%" /></a>
+      <p align="center"><strong>05 · The reveal</strong><br/><sub>Everyone's secrets exposed</sub></p>
+    </td>
+    <td width="33%" valign="top">
+      <a href="docs/screenshots/07-leaderboard-mobile.png"><img src="docs/screenshots/07-leaderboard-mobile.png" alt="Final three-player leaderboard and rematch action" width="100%" /></a>
+      <p align="center"><strong>06 · The champion</strong><br/><sub>Final scoreboard + rematch</sub></p>
+    </td>
+  </tr>
+</table>
+
+<sub>Captured from a disposable local game using the same source code as the deployed Classic app. See <a href="docs/screenshots/README.md">how these screenshots were generated</a>.</sub>
+
+---
+
 ## 🎲 How to play
 
 <img src="assets/game-flow.svg" alt="Five-step game flow: Gather, Deal, Ready, Guess, Reveal" width="100%"/>
