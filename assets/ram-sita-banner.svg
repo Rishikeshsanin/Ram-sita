@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="480" viewBox="0 0 1440 480" role="img" aria-labelledby="title desc">
+<title id="title">RAM–SITA — The Royal Guessing Game</title>
+<desc id="desc">Dark royal purple and gold illustration featuring three secret character cards, Rama, Sita and Ravana, with the tagline One secret. One guess. Endless drama.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#131025"/><stop offset=".56" stop-color="#241a39"/><stop offset="1" stop-color="#121324"/></linearGradient>
+  <radialGradient id="glow" cx=".69" cy=".37" r=".6"><stop stop-color="#94577b" stop-opacity=".45"/><stop offset=".6" stop-color="#51396d" stop-opacity=".15"/><stop offset="1" stop-color="#51396d" stop-opacity="0"/></radialGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff2c2"/><stop offset=".48" stop-color="#f4c578"/><stop offset="1" stop-color="#c78445"/></linearGradient>
+  <linearGradient id="card" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#604365"/><stop offset=".5" stop-color="#332644"/><stop offset="1" stop-color="#1d1b38"/></linearGradient>
+  <linearGradient id="front" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#997258"/><stop offset=".22" stop-color="#7c5266"/><stop offset=".63" stop-color="#46304e"/><stop offset="1" stop-color="#25233c"/></linearGradient>
+  <filter id="shadow" x="-50%" y="-50%" width="220%" height="220%"><feGaussianBlur in="SourceAlpha" stdDeviation="13"/><feOffset dy="15"/><feComponentTransfer><feFuncA type="linear" slope=".58"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <pattern id="stars" width="135" height="105" patternUnits="userSpaceOnUse"><circle cx="20" cy="33" r="1.2" fill="#eecfa5" opacity=".21"/><circle cx="105" cy="82" r="1" fill="#eecfa5" opacity=".15"/></pattern>
+  <clipPath id="bounds"><rect x="0" y="0" width="1440" height="480" rx="28"/></clipPath>
+</defs>
+<g clip-path="url(#bounds)">
+  <rect width="1440" height="480" fill="url(#bg)"/>
+  <rect width="1440" height="480" fill="url(#glow)"/>
+  <rect width="1440" height="480" fill="url(#stars)"/>
+  <circle cx="1120" cy="228" r="307" fill="none" stroke="#d8a36a" stroke-opacity=".13" stroke-width="1.5"/>
+  <circle cx="1120" cy="228" r="242" fill="none" stroke="#d8a36a" stroke-opacity=".10" stroke-width="1"/>
+  <circle cx="1120" cy="228" r="184" fill="none" stroke="#d8a36a" stroke-opacity=".09" stroke-width="1"/>
+  <path d="M0 410C215 380 320 442 510 406S850 435 1110 390 1320 426 1440 377" fill="none" stroke="#e2ac77" stroke-opacity=".17" stroke-width="1.4"/>
+  <path d="M0 428C250 390 380 452 600 421S920 460 1170 418 1355 444 1440 412" fill="none" stroke="#e2ac77" stroke-opacity=".09" stroke-width="1.2"/>
+  <rect x="36" y="36" width="1368" height="408" rx="19" fill="none" stroke="#f2cd91" stroke-opacity=".17" stroke-width="1"/>
+  <path d="M68 68h56 M68 68v56 M1372 68h-56 M1372 68v56 M68 412h56 M68 412v-56 M1372 412h-56 M1372 412v-56" stroke="#edc17d" stroke-opacity=".56" stroke-width="2" fill="none"/>
+  <g transform="translate(94 92)">
+    <circle cx="23" cy="23" r="22" fill="none" stroke="#ecca8a" stroke-opacity=".7" stroke-width="1.4"/>
+    <path d="M23 7v32M7 23h32 M11 11l24 24 M35 11L11 35" stroke="#f4cd87" opacity=".42"/>
+    <circle cx="23" cy="23" r="8" fill="#e3b271"/>
+    <circle cx="23" cy="23" r="3" fill="#2b1d34"/>
+    <text x="62" y="29" font-size="15" font-family="Arial,sans-serif" letter-spacing="5" font-weight="700" fill="#e6bd83">THE ROYAL GUESSING GAME</text>
+  </g>
+  <text x="94" y="245" font-family="Georgia,'Times New Roman',serif" font-size="111" letter-spacing="1" font-weight="700" fill="url(#gold)">RAM<tspan fill="#fff0d0">–</tspan>SITA</text>
+  <text x="100" y="293" font-family="Arial,sans-serif" font-size="21" letter-spacing="5.7" font-weight="600" fill="#efe1dc">ONE SECRET. ONE GUESS.</text>
+  <text x="100" y="324" font-family="Arial,sans-serif" font-size="21" letter-spacing="5.7" font-weight="600" fill="#d99bbb">ENDLESS DRAMA.</text>
+  <g font-family="Arial,sans-serif" font-size="13" letter-spacing="1.6" fill="#edddcb">
+    <rect x="98" y="358" width="156" height="38" rx="19" fill="#ffe3af" fill-opacity=".10" stroke="#efc688" stroke-opacity=".35"/>
+    <text x="117" y="382">3–10 PLAYERS</text>
+    <rect x="270" y="358" width="184" height="38" rx="19" fill="#ffe3af" fill-opacity=".10" stroke="#efc688" stroke-opacity=".35"/>
+    <text x="289" y="382">PLAY TOGETHER</text>
+    <rect x="470" y="358" width="156" height="38" rx="19" fill="#ffe3af" fill-opacity=".10" stroke="#efc688" stroke-opacity=".35"/>
+    <text x="491" y="382">NO SIGN-UP</text>
+  </g>
+  <g transform="translate(840 105) rotate(-16 100 148)" filter="url(#shadow)">
+    <rect x="0" y="0" width="200" height="294" rx="19" fill="url(#card)" stroke="#e4bc82" stroke-width="2"/>
+    <rect x="11" y="11" width="178" height="272" rx="12" fill="none" stroke="#e8bd86" stroke-opacity=".60"/>
+    <text x="100" y="45" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" letter-spacing="3" fill="#f6d7a6">THE SEEKER</text>
+    <path d="M130 90 C52 120 54 199 130 220 M127 92L128 216 M65 157h106 M158 147l14 10-14 10" fill="none" stroke="url(#gold)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="100" cy="155" r="82" fill="none" stroke="#f8cc91" stroke-opacity=".2"/>
+    <text x="100" y="262" text-anchor="middle" font-family="Georgia,serif" font-size="27" fill="#f4d1a7">RAMA</text>
+  </g>
+  <g transform="translate(1071 113) rotate(15 100 148)" filter="url(#shadow)">
+    <rect x="0" y="0" width="200" height="294" rx="19" fill="url(#card)" stroke="#e4bc82" stroke-width="2"/>
+    <rect x="11" y="11" width="178" height="272" rx="12" fill="none" stroke="#e8bd86" stroke-opacity=".60"/>
+    <text x="100" y="45" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" letter-spacing="3" fill="#f6d7a6">THE TRICKSTER</text>
+    <circle cx="100" cy="155" r="82" fill="none" stroke="#f8cc91" stroke-opacity=".2"/>
+    <path d="M42 132l16 66h84l16-66-29 21-28-49-29 49z" stroke="url(#gold)" stroke-width="5" fill="#e5a768" fill-opacity=".18" stroke-linejoin="round"/>
+    <circle cx="101" cy="133" r="7" fill="#f0c17f"/><circle cx="58" cy="137" r="5" fill="#f0c17f"/><circle cx="158" cy="137" r="5" fill="#f0c17f"/>
+    <path d="M58 204h84" stroke="#f0c17f" stroke-width="5" stroke-linecap="round"/>
+    <text x="100" y="262" text-anchor="middle" font-family="Georgia,serif" font-size="27" fill="#f4d1a7">RAVANA</text>
+  </g>
+  <g transform="translate(959 66)" filter="url(#shadow)">
+    <rect x="0" y="0" width="205" height="305" rx="20" fill="url(#front)" stroke="#ffe0a7" stroke-width="2.5"/>
+    <rect x="11" y="11" width="183" height="283" rx="13" fill="none" stroke="#ffdc9e" stroke-opacity=".8" stroke-width="1.3"/>
+    <path d="M26 36h25 M154 36h25 M26 270h25 M154 270h25" stroke="#f4c78a" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/>
+    <text x="102" y="48" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" letter-spacing="3" fill="#fff1d5">THE SECRET</text>
+    <circle cx="103" cy="150" r="76" fill="#fcddac" fill-opacity=".09" stroke="#ffe1a8" stroke-opacity=".21"/>
+    <g transform="translate(102 159)" fill="url(#gold)" stroke="#ffdfaa" stroke-opacity=".65" stroke-width="1">
+      <ellipse cx="0" cy="-23" rx="17" ry="48"/>
+      <ellipse cx="0" cy="-20" rx="17" ry="44" transform="rotate(44)"/>
+      <ellipse cx="0" cy="-20" rx="17" ry="44" transform="rotate(-44)"/>
+      <ellipse cx="0" cy="-15" rx="17" ry="40" transform="rotate(80)"/>
+      <ellipse cx="0" cy="-15" rx="17" ry="40" transform="rotate(-80)"/>
+      <circle cy="-10" r="17" fill="#7f4f66"/>
+      <circle cy="-10" r="9" fill="#f9db99"/>
+    </g>
+    <text x="102" y="270" text-anchor="middle" font-family="Georgia,serif" font-size="31" fill="#ffebc9">SITA</text>
+  </g>
+</g>
+</svg>

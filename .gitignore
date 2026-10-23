@@ -5,3 +5,7 @@ node_modules/
 .DS_Store
 *.log
 coverage/
+
+# Automated browser test artifacts
+playwright-report/
+test-results/

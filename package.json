@@ -2,7 +2,7 @@
   "name": "ram-sita",
   "version": "1.0.0",
   "private": true,
-  "description": "Mobile-first in-person social deduction game with real-time private rooms",
+  "description": "The classic Ram–Sita paper-chit game, reimagined as a mobile-first real-time party game for friends in the same room.",
   "license": "MIT",
   "engines": {
     "node": ">=20"

@@ -1,81 +1,164 @@
-# Ram–Sita · Classic Party Game
+<a id="top"></a>
+<div align="center">
+  <img src="assets/ram-sita-banner.svg" alt="RAM–SITA: The Royal Guessing Game — One secret. One guess. Endless drama." width="100%" />
+  <br />
+  <h3>The childhood paper-chit game. Reimagined for your entire gang.</h3>
+  <p><strong>Same room. Secret characters. One very suspicious friend.</strong> 👑</p>
+  <p>An in-person, real-time multiplayer party game where everyone uses their own phone,<br />but the real action happens <strong>face-to-face.</strong></p>
+  <p>
+    <a href="https://ram-sita-classic.onrender.com"><img alt="Play Ram–Sita" src="https://img.shields.io/badge/▶_PLAY_THE_GAME-FFD18B?style=for-the-badge&amp;labelColor=251B35&amp;color=EAB971" /></a>
+    <a href="#-how-to-play"><img alt="How to play" src="https://img.shields.io/badge/HOW_TO_PLAY-342944?style=for-the-badge&amp;logo=bookstack&amp;logoColor=white" /></a>
+    <a href="#-under-the-hood"><img alt="Explore the code" src="https://img.shields.io/badge/EXPLORE_THE_CODE-342944?style=for-the-badge&amp;logo=github&amp;logoColor=white" /></a>
+  </p>
+  <p>
+    <a href="https://github.com/Rishikeshsanin/Ram-sita/actions/workflows/ci.yml"><img alt="Main CI" src="https://github.com/Rishikeshsanin/Ram-sita/actions/workflows/ci.yml/badge.svg?branch=main" /></a>
+    <a href="https://github.com/Rishikeshsanin/Ram-sita/actions/workflows/public-smoke.yml"><img alt="Public WebSocket smoke" src="https://github.com/Rishikeshsanin/Ram-sita/actions/workflows/public-smoke.yml/badge.svg?branch=main" /></a>
+    <img alt="Node.js 20+" src="https://img.shields.io/badge/Node.js-20%2B-43853D?logo=node.js&amp;logoColor=white" />
+    <img alt="3 to 10 players" src="https://img.shields.io/badge/Players-3--10-A67AC5" />
+    <img alt="MIT License" src="https://img.shields.io/badge/License-MIT-E6B974" />
+  </p>
+  <p>
+    <a href="https://ram-sita-classic.onrender.com"><strong>🎮 Play live</strong></a> ·
+    <a href="#-how-to-play">📖 Game rules</a> ·
+    <a href="docs/TESTING.md">🧪 Testing</a> ·
+    <a href="CONTRIBUTING.md">🛠️ Contribute</a>
+  </p>
+</div>
 
-**The childhood paper-chit game, on everyone's phone.** Built for friends sitting together in the same physical room. No accounts and no camera or microphone.
+---
 
-## Play
+## ✨ The game in a nutshell
 
-1. The host creates a private room and chooses **3–10 players**, **3–30 rounds**, and a **20–90-second** guessing timer.
-2. Friends join with the six-character code or invite link, type a name, and tap **Ready**.
-3. The host starts the match. Everyone receives one **secret character** and sees a sealed card. **Rama's name** is publicly announced; other identities stay private.
-4. Everyone taps **Reveal my card** privately, reads their character, then taps **I have seen my card — Ready!**. There is **no countdown during this stage**.
-5. When **all connected players** have confirmed their cards, the host's selected timer begins automatically. Everyone talks and bluffs aloud. Only Rama can make **one final guess** of who has Sita.
-6. If Rama guesses or the timer expires, everyone's roles are revealed and the server awards the round points. The host taps **Next round**; each new round also has a private-card confirmation stage.
-7. When the chosen rounds are over, highest cumulative score wins (ties share first place). Host may start a **rematch** in the same lobby; everyone readies up again.
+Remember folding little paper chits, hiding your character, and trying *not* to laugh while Rama interrogated the room?
 
-The first release is **Classic only**. No mystery symbols, missions, or experimental mechanics. We can consider them as an optional separate mode later.
+**That's Ram–Sita. No new gimmicks. Just the classic game, built for a group of friends with phones.**
 
-## Score rules (initial house rules)
+| 🏹 **One seeker** | 🪷 **Secret identities** | 👑 **Maximum bluffing** |
+| :--- | :--- | :--- |
+| Rama gets **one final guess** to find Sita. | Everyone sees **only their own character** before the reveal. | Friends accuse, lie, defend themselves and laugh *in person*. |
+| ⏳ **Fair rounds** | 🏆 **Live leaderboard** | 🔗 **Instant rooms** |
+| Everyone checks their card **before** the countdown begins. | Points add up automatically; rematches keep the gang together. | Create a code, share a link, **no accounts required**. |
 
-Regional Ram–Sita paper-chit rules differ. This launch uses one transparent default:
+## 🎲 How to play
 
-| Character | If Rama finds Sita | If Rama misses or time expires |
+<img src="assets/game-flow.svg" alt="Five-step game flow: Gather, Deal, Ready, Guess, Reveal" width="100%"/>
+
+1. **Gather your friends.** The host creates a private room, chooses **3–10 players**, **3–30 rounds**, and a **20–90 second** guessing timer. Friends join by code or invite link and tap *I'm Ready*.
+2. **Deal the secrets.** The host starts. Everyone privately flips their card to discover their character. **Rama's identity is public; everyone else's is secret.**
+3. **Confirm your card.** Each player taps *I have seen my card — Ready!* The timer **does not start** until everyone confirms.
+4. **Find Sita.** Everyone argues and bluffs out loud. Rama selects **one** suspected Sita before time runs out. No second guesses.
+5. **Reveal the truth.** All cards flip, the server awards points, and the leaderboard updates. The host begins the next round. Highest total score wins; ties share the crown.
+
+> **Classic only.** No symbols, secret missions or alternate modes are mixed into the childhood rules.
+
+### 🎭 Characters
+
+The cast scales with the size of the room. Each round uses exactly one unique character per player:
+
+| 3 players | Add as the group grows |
+| --- | --- |
+| 🏹 **Rama**, 🪷 **Sita**, 👑 **Ravana** | 🛡️ Lakshmana, 🐒 Hanuman, 🌿 Bharata, ⚔️ Shatrughna, 🦁 Sugriva, ✨ Vibhishana, 🦅 Jatayu |
+
+The Rama role rotates fairly rather than repeatedly favoring the same player.
+
+<details>
+<summary><strong>🧮 Scoring (current house rules)</strong></summary>
+
+<br />
+
+Different families play Ram–Sita differently. This release uses **these house rules**:
+
+| Character | Rama finds Sita | Wrong guess / timeout |
 | --- | ---: | ---: |
-| Rama | +1,000 | +0 |
-| Sita | +200 | +800 |
-| Ravana | +100 | +500 |
-| All other characters | +200 | +200 |
+| 🏹 Rama | **1,000** | **0** |
+| 🪷 Sita | 200 | **800** |
+| 👑 Ravana | 100 | 500 |
+| Everyone else | 200 | 200 |
 
-Players receive one unique role per round. Rama rotates so each player gets the seeker role fairly over the match. Highest total wins; equal totals are shared winners.
+The server—not players' phones—calculates scores. Highest total wins; tied scores share placement.
 
-## Run locally
+</details>
 
-Requires Node.js >=20:
+## ⚡ Play or run it yourself
+
+**[▶ Play Ram–Sita online](https://ram-sita-classic.onrender.com)** — best experienced with friends together, each on a separate device.
+
+> [!NOTE]
+> The demo runs on a **free Render web service**. First load may be slow after an idle period. Active rooms live in server memory, so a service restart or redeploy clears those rooms.
+
+### Local setup
+
+**Requirements:** Node.js **20+** and npm.
 
 ```bash
+git clone https://github.com/Rishikeshsanin/Ram-sita.git
+cd Ram-sita
 npm install
-npm run check
-npm test
 npm start
 ```
 
-Open http://localhost:3000. To connect phones on the same Wi-Fi, start the app on a host reachable via its LAN IP and open `http://HOST_IP:3000` from every phone. Sharing across the Internet requires public HTTPS and working WebSocket support.
-
-## Deploy
-
-**Play the deployed game:** https://ram-sita-classic.onrender.com . The app requires a **single persistent WebSocket-capable Node.js host** and includes a `Dockerfile`, `render.yaml` and `/health` endpoint.
-
-### Render fallback (prepared)
-
-Railway may temporarily block new deployments. We included a dedicated [Render Blueprint](render.yaml) for this exact repository. To deploy it:
-
-1. Open [Render Dashboard](https://dashboard.render.com/) and connect GitHub.
-2. Choose **New → Blueprint**, select `Rishikeshsanin/Ram-sita` on branch `main`, and approve only the new **ram-sita-classic** web service. Do **not** import any existing services or databases.
-3. Let the Docker build and HTTP `/health` checks finish, then open the **actual** `.onrender.com` address shown in your dashboard. Never guess a live URL from the service name.
-4. Verify the public homepage, `/health`, and a 3-person round from separate phones.
-5. After verification, add that exact HTTPS URL to [Minglecade](https://github.com/Rishikeshsanin/Minglecade) in `src/data/games.ts`.
-
-The Blueprint targets a **single Singapore-region Free web service** with no database. Free services can spin down after 15 minutes without inbound HTTP or WebSocket messages, and sleeping, restarting or redeploying will erase the in-memory rooms. For a more dependable always-on game, consider a paid instance only after explicitly agreeing to the cost. A free instance is appropriate for testing and casual rounds, not production uptime.
-
-Minglecade is a **directory**, not a game server: its Play link opens the standalone game in another tab. Do not publish a placeholder or speculative game URL.
-
-### Important operational limitations
-
-- Rooms currently live in this Node process's memory. **Restart/redeploy clears active games**, so avoid redeploying during a match.
-- Use one instance/replica. A database or durable room store can be evaluated later.
-- Session tokens stay in each player's own browser; the server assigns characters, accepts only Rama's final guess, and computes the score.
-- WebSocket connections may briefly drop on bad networks; reloading reconnects a seat using its saved local session.
-- This is designed for social play among friends who share the code; room codes are not user authentication. Keep card screens private.
-- Only Ram–Sita and the Minglecade directory are in the scope of this release.
-
-## Tests
-
-GitHub Actions runs JavaScript syntax checks, unit tests, a real three-client WebSocket match, and Chromium browser end-to-end tests after each push:
+Open **http://localhost:3000**. For nearby phones on the same Wi-Fi, use your computer's LAN IP (e.g. http://192.168.1.5:3000) with firewall access configured.
 
 ```bash
-npm run check && npm test
-# For local Chromium browser tests (install browser once):
+npm run check        # JavaScript syntax checks
+npm test             # Game logic + three-client WebSocket tests
 npx playwright install chromium
-npm run test:browser
+npm run test:browser # Chromium multiplayer and responsive tests
 ```
 
-See [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) for the scope and deferred ideas.
+For browser-test setup and test coverage, see **[Testing](docs/TESTING.md)**.
+
+## 🧠 Under the hood
+
+<div align="center">
+
+**Vanilla JavaScript** · **Node.js** · **WebSockets (ws)** · **HTML/CSS** · **Playwright** · **GitHub Actions** · **Docker** · **Render**
+
+</div>
+
+```text
+Ram-sita/
+├── assets/                 # Original branding + gameplay illustration
+├── browser/                # 3-player Chromium end-to-end scenarios
+├── docs/                   # Architecture, game rules and deployment
+├── public/                 # Mobile-first game interface
+├── src/
+│   ├── game.js             # Roles, round state, fairness and scoring
+│   └── server.js           # HTTP + WebSocket multiplayer server
+├── smoke/                  # Public live-site smoke test
+├── test/                   # Logic, secrecy and WebSocket tests
+├── Dockerfile              # Single-service container
+└── render.yaml             # Optional Render Blueprint
+```
+
+**Multiplayer is server-authoritative.** The backend shuffles roles, verifies the guess, keeps opponents' cards hidden and calculates scores. Phones only receive data their players are allowed to see.
+
+| Quality gate | What it checks |
+| --- | --- |
+| [**Node CI**](https://github.com/Rishikeshsanin/Ram-sita/actions/workflows/ci.yml) | Syntax, unit/integration tests, real three-player Chromium match, mobile-width checks |
+| [**Live smoke**](https://github.com/Rishikeshsanin/Ram-sita/actions/workflows/public-smoke.yml) | Public HTTP health + remote three-client WebSocket round |
+| **Session recovery** | Reloading restores a seat while the same server instance is running |
+
+This project intentionally needs **no login, database, microphone or camera**. For capacity and recovery limitations, see the docs below.
+
+## 📚 Project handbook
+
+| Guide | What's inside |
+| --- | --- |
+| [🎮 Game design & rules](docs/GAME_DESIGN.md) | What Classic includes, how a round works and what we're leaving out |
+| [🏗️ Architecture](docs/ARCHITECTURE.md) | State machine, privacy, messages, host powers and room lifecycle |
+| [🧪 Testing](docs/TESTING.md) | Commands, automated coverage and physical-device QA checklist |
+| [🚀 Deployment](docs/DEPLOYMENT.md) | Render/Docker setup, health checks, hosting limitations and release verification |
+| [🤝 Contributing](CONTRIBUTING.md) | How to propose a change without breaking Classic |
+| [🔒 Security](SECURITY.md) | Trust boundaries and responsible reporting |
+
+## 👑 Made to bring the group together
+
+Ram–Sita isn't another game that traps everyone on their phones. **The screen holds the secret; your friends create the drama.**
+
+Built by **[Rishikeshsanin](https://github.com/Rishikeshsanin)** · **[MIT License](LICENSE)**
+
+<div align="center">
+  <p><strong>One room. One Sita. One final guess.</strong></p>
+  <p><a href="#top"><strong>↑ Back to top</strong></a> · <a href="https://ram-sita-classic.onrender.com"><strong>Play now ↗</strong></a></p>
+</div>
