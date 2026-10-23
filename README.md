@@ -1,31 +1,28 @@
+<a id="top"></a>
 <div align="center">
-
-<img src="assets/ram-sita-banner.svg" alt="RAM–SITA: The Royal Guessing Game — One secret. One guess. Endless drama." width="100%" />
-
-<br />
-
-### The childhood paper-chit game. Reimagined for your entire gang.
-
-**Same room. Secret characters. One very suspicious friend.** 👑
-
-An in-person, real-time multiplayer party game where everyone uses their own phone, but the real action happens **face-to-face**.
-
-<br />
-
-[![Play Ram–Sita](https://img.shields.io/badge/▶_PLAY_THE_GAME-FFD18B?style=for-the-badge&labelColor=251B35&color=EAB971)](https://ram-sita-classic.onrender.com)
-[![How to Play](https://img.shields.io/badge/HOW_TO_PLAY-342944?style=for-the-badge&logo=bookstack&logoColor=white)](#-how-to-play)
-[![Source Code](https://img.shields.io/badge/EXPLORE_THE_CODE-342944?style=for-the-badge&logo=github&logoColor=white)](#-under-the-hood)
-
-<br />
-
-[![Main CI](https://github.com/Rishikeshsanin/Ram-sita/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Rishikeshsanin/Ram-sita/actions/workflows/ci.yml)
-[![Public WebSocket smoke](https://github.com/Rishikeshsanin/Ram-sita/actions/workflows/public-smoke.yml/badge.svg?branch=main)](https://github.com/Rishikeshsanin/Ram-sita/actions/workflows/public-smoke.yml)
-![Node.js](https://img.shields.io/badge/Node.js-20%2B-43853D?logo=node.js&logoColor=white)
-![Players](https://img.shields.io/badge/Players-3--10-A67AC5)
-![License](https://img.shields.io/badge/License-MIT-E6B974)
-
-**[🎮 Play live](https://ram-sita-classic.onrender.com)** · **[📖 Game rules](#-how-to-play)** · **[🧪 Testing](docs/TESTING.md)** · **[🛠️ Contribute](CONTRIBUTING.md)**
-
+  <img src="assets/ram-sita-banner.svg" alt="RAM–SITA: The Royal Guessing Game — One secret. One guess. Endless drama." width="100%" />
+  <br />
+  <h3>The childhood paper-chit game. Reimagined for your entire gang.</h3>
+  <p><strong>Same room. Secret characters. One very suspicious friend.</strong> 👑</p>
+  <p>An in-person, real-time multiplayer party game where everyone uses their own phone,<br />but the real action happens <strong>face-to-face.</strong></p>
+  <p>
+    <a href="https://ram-sita-classic.onrender.com"><img alt="Play Ram–Sita" src="https://img.shields.io/badge/▶_PLAY_THE_GAME-FFD18B?style=for-the-badge&amp;labelColor=251B35&amp;color=EAB971" /></a>
+    <a href="#-how-to-play"><img alt="How to play" src="https://img.shields.io/badge/HOW_TO_PLAY-342944?style=for-the-badge&amp;logo=bookstack&amp;logoColor=white" /></a>
+    <a href="#-under-the-hood"><img alt="Explore the code" src="https://img.shields.io/badge/EXPLORE_THE_CODE-342944?style=for-the-badge&amp;logo=github&amp;logoColor=white" /></a>
+  </p>
+  <p>
+    <a href="https://github.com/Rishikeshsanin/Ram-sita/actions/workflows/ci.yml"><img alt="Main CI" src="https://github.com/Rishikeshsanin/Ram-sita/actions/workflows/ci.yml/badge.svg?branch=main" /></a>
+    <a href="https://github.com/Rishikeshsanin/Ram-sita/actions/workflows/public-smoke.yml"><img alt="Public WebSocket smoke" src="https://github.com/Rishikeshsanin/Ram-sita/actions/workflows/public-smoke.yml/badge.svg?branch=main" /></a>
+    <img alt="Node.js 20+" src="https://img.shields.io/badge/Node.js-20%2B-43853D?logo=node.js&amp;logoColor=white" />
+    <img alt="3 to 10 players" src="https://img.shields.io/badge/Players-3--10-A67AC5" />
+    <img alt="MIT License" src="https://img.shields.io/badge/License-MIT-E6B974" />
+  </p>
+  <p>
+    <a href="https://ram-sita-classic.onrender.com"><strong>🎮 Play live</strong></a> ·
+    <a href="#-how-to-play">📖 Game rules</a> ·
+    <a href="docs/TESTING.md">🧪 Testing</a> ·
+    <a href="CONTRIBUTING.md">🛠️ Contribute</a>
+  </p>
 </div>
 
 ---
@@ -162,9 +159,6 @@ Ram–Sita isn't another game that traps everyone on their phones. **The screen 
 Built by **[Rishikeshsanin](https://github.com/Rishikeshsanin)** · **[MIT License](LICENSE)**
 
 <div align="center">
-
-**One room. One Sita. One final guess.**
-
-[**↑ Back to top**](#top) · [**Play now ↗**](https://ram-sita-classic.onrender.com)
-
+  <p><strong>One room. One Sita. One final guess.</strong></p>
+  <p><a href="#top"><strong>↑ Back to top</strong></a> · <a href="https://ram-sita-classic.onrender.com"><strong>Play now ↗</strong></a></p>
 </div>
