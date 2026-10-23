@@ -1,0 +1,54 @@
+name: "🐛 Bug report"
+description: Report a reproducible issue in Ram–Sita Classic.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping. Please **don't include private session tokens or live room codes**.
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where did it happen?
+      options:
+        - Room creation or joining
+        - Private character / ready stage
+        - Guess timer or Rama selection
+        - Role reveal / scores
+        - Reconnect / host transfer
+        - Mobile layout
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. Create a 3-player room; 2. ..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Device / browser / player count
+      placeholder: "iPhone Safari / Android Chrome / 3 players"
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: I have removed session tokens, private room codes and sensitive data.
+          required: true
