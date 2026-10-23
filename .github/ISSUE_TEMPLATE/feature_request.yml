@@ -1,0 +1,32 @@
+name: "✨ Feature idea"
+description: Suggest a small improvement while preserving the Classic game.
+title: "[Idea]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      placeholder: "As a player, I wish..."
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: How should it work?
+      description: Be specific about the host, room, secret-card and reveal flow.
+    validations:
+      required: true
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Area
+      options:
+        - Classic usability
+        - Accessibility or mobile responsiveness
+        - Performance or stability
+        - Visual polish
+        - Documentation
+        - Separate future mode (not a Classic rule change)
+    validations:
+      required: true
