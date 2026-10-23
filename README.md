@@ -52,7 +52,7 @@ Remember folding little paper chits, hiding your character, and trying *not* to 
 4. **Find Sita.** Everyone argues and bluffs out loud. Rama selects **one** suspected Sita before time runs out. No second guesses.
 5. **Reveal the truth.** All cards flip, the server awards points, and the leaderboard updates. The host begins the next round. Highest total score wins; ties share the crown.
 
-> **Classic Mode only.** No symbols, secret missions or alternate modes are mixed into the childhood rules.
+> **Classic only.** No symbols, secret missions or alternate modes are mixed into the childhood rules.
 
 ### 🎭 Characters
 
