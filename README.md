@@ -149,6 +149,7 @@ This project intentionally needs **no login, database, microphone or camera**. F
 | [🏗️ Architecture](docs/ARCHITECTURE.md) | State machine, privacy, messages, host powers and room lifecycle |
 | [🧪 Testing](docs/TESTING.md) | Commands, automated coverage and physical-device QA checklist |
 | [🚀 Deployment](docs/DEPLOYMENT.md) | Render/Docker setup, health checks, hosting limitations and release verification |
+| [📜 Changelog](CHANGELOG.md) | What's shipped in the Classic V1 release |
 | [🤝 Contributing](CONTRIBUTING.md) | How to propose a change without breaking Classic |
 | [🔒 Security](SECURITY.md) | Trust boundaries and responsible reporting |
 
